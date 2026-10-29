@@ -1,0 +1,275 @@
+/* ==========================================================================
+   Brand Colors & Theme Variables
+   Primary: Dark Blue (#002147)
+   Accent: Red (#e22319)
+   ========================================================================== */
+
+:root,
+html[data-theme="light"] {
+  --pst-color-primary: #002147;
+  --pst-color-primary-text: #ffffff;
+  --pst-color-primary-highlight: #001633;
+
+  /* Secondary, accent & hover: replace theme purple with accent red */
+  --pst-color-secondary: #e22319;
+  --pst-color-secondary-text: #ffffff;
+  --pst-color-secondary-highlight: #ba1a12;
+  --pst-color-secondary-bg: #fdf0ef;
+  --pst-color-accent: var(--pst-color-secondary);
+  --pst-color-accent-bg: var(--pst-color-secondary-bg);
+  --pst-color-link-higher-contrast: #001633;
+
+  /* Admonition / Info: lighter shade of Dark Blue */
+  --pst-color-info: #002147;
+  --pst-color-info-bg: #f0f4f8;
+  --pst-color-info-text: #002147;
+  --pst-color-info-highlight: #001633;
+
+  /* Neutral table hovers and inline code (avoid theme purples) */
+  --pst-color-table-row-hover-bg: rgba(0, 33, 71, 0.04);
+  --pst-color-inline-code: #002147;
+}
+
+html[data-theme="dark"] {
+  --pst-color-primary: #6ba4e8;
+  --pst-color-primary-text: #14181e;
+  --pst-color-primary-highlight: #8ebef5;
+
+  /* Secondary, accent & hover */
+  --pst-color-secondary: #ff5449;
+  --pst-color-secondary-text: #14181e;
+  --pst-color-secondary-highlight: #ff756c;
+  --pst-color-secondary-bg: #3b1411;
+  --pst-color-accent: var(--pst-color-secondary);
+  --pst-color-accent-bg: var(--pst-color-secondary-bg);
+  --pst-color-link-higher-contrast: #8ebef5;
+
+  /* Admonition / Info: dark navy tint */
+  --pst-color-info: #6ba4e8;
+  --pst-color-info-bg: #152234;
+  --pst-color-info-text: #d6e6f9;
+  --pst-color-info-highlight: #8ebef5;
+
+  /* Neutral table hovers and inline code */
+  --pst-color-table-row-hover-bg: rgba(107, 164, 232, 0.08);
+  --pst-color-inline-code: #9dc1ee;
+}
+
+/* Landing-page styles */
+.mp-home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.mp-home-actions p {
+  margin: 0;
+}
+
+.mp-home-actions .sd-btn {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 2.5rem;
+  padding: 0 1.15rem;
+  border-radius: 0.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Quick-install copyable snippet styled in identical dimensions */
+.mp-home-actions .mp-home-pip-snippet {
+  margin: 0;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.mp-home-actions .mp-home-pip-snippet .highlight {
+  box-sizing: border-box;
+  height: 2.5rem;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  background: var(--pst-color-surface);
+  border: 1px solid var(--pst-color-border);
+  border-radius: 0.4rem;
+  padding: 0 0.6rem 0 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.mp-home-actions .mp-home-pip-snippet .highlight:hover {
+  border-color: var(--pst-color-primary);
+  background: var(--pst-color-background);
+}
+
+.mp-home-actions .mp-home-pip-snippet pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 0.92rem;
+  font-family: var(--pst-font-family-monospace);
+  color: var(--pst-color-text-base);
+  display: block !important;
+  white-space: pre !important;
+  line-height: normal !important;
+}
+
+.mp-home-actions .mp-home-pip-snippet pre::before {
+  content: "$ ";
+  color: var(--pst-color-text-muted);
+  user-select: none;
+  font-weight: 500;
+}
+
+.mp-home-actions .mp-home-pip-snippet button.copybtn {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0 !important;
+  margin-left: 0.65rem !important;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  opacity: 0.65;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: var(--pst-color-text-muted) !important;
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.mp-home-actions .mp-home-pip-snippet .highlight:hover button.copybtn {
+  opacity: 1;
+  color: var(--pst-color-primary) !important;
+}
+
+.mp-home-actions .mp-home-pip-snippet button.copybtn:hover {
+  background: var(--pst-color-surface) !important;
+  border-color: var(--pst-color-border) !important;
+}
+
+.mp-home-actions .mp-home-pip-snippet button.copybtn.success {
+  opacity: 1;
+  color: #198754 !important;
+}
+
+/* Suppress floating tooltip bubble so feedback stays cleanly as the checkmark icon */
+.mp-home-actions .mp-home-pip-snippet button.copybtn::after {
+  display: none !important;
+}
+
+.mp-home-workflow {
+  margin: 2rem 0;
+}
+
+.mp-home-workflow .mp-home-step {
+  position: relative;
+  text-align: center;
+}
+
+.mp-home-workflow .mp-home-step:not(:last-child)::after {
+  content: "\2192";
+  position: absolute;
+  right: 0;
+  top: 30%;
+  transform: translateX(50%);
+  z-index: 1;
+  color: var(--pst-color-text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.mp-home-workflow img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 14 / 11;
+  object-fit: contain;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.mp-home-workflow .rubric {
+  border: 0;
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+
+.mp-home-workflow .mp-home-step > p:not(.rubric) {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--pst-color-text-muted);
+}
+
+@media (max-width: 767px) {
+  .mp-home-workflow .mp-home-step::after {
+    display: none;
+  }
+}
+
+.sd-card-body:has(.mp-home-icon) {
+  display: flex;
+  flex-direction: column;
+}
+
+.mp-home-icon {
+  order: -1;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 1rem;
+  color: var(--pst-color-primary);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: color 0.2s ease;
+}
+
+.sd-card.sd-card-hover:hover .mp-home-icon {
+  color: var(--pst-color-secondary);
+}
+
+.mp-home-index-links {
+  margin-top: 2.5rem;
+  font-size: 0.875rem;
+}
+
+/* DataFrame output tables */
+.bd-content .output_html,
+.bd-content .mp-dataframe-preview {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.25rem 0 1.5rem 0;
+}
+
+.bd-content table.dataframe {
+  color: var(--pst-color-table);
+  font-size: 0.875rem;
+}
+
+.bd-content table.dataframe thead {
+  border-bottom: 2px solid var(--pst-color-primary);
+}
+
+.bd-content table.dataframe thead tr {
+  background-color: var(--pst-color-table-heading-bg);
+}
+
+.bd-content table.dataframe tbody tr:nth-child(odd) {
+  background-color: var(--pst-color-table-row-zebra-low-bg);
+}
+
+.bd-content table.dataframe tbody tr:nth-child(even) {
+  background-color: var(--pst-color-table-row-zebra-high-bg);
+}
+
+.bd-content table.dataframe tbody tr:hover {
+  background-color: var(--pst-color-table-row-hover-bg);
+}

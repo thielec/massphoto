@@ -1,0 +1,122 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "massphoto"
+dynamic = ["version"]
+description = "Python package for mass photometry data analysis"
+authors = [
+    { name = "Jan Christoph Thiele", email = "jan.thiele@chem.ox.ac.uk" },
+    { name = "Stephen Thorpe", email = "stephen.thorpe@chem.ox.ac.uk" },
+]
+license = "MIT"
+license-files = ["LICENSE"]
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = [
+    "mass-photometry",
+    "single-molecule",
+    "interferometric-scattering",
+    "image-analysis",
+    "biophysics",
+    "microscopy",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "bottleneck",
+    "tqdm",
+    "dask[dataframe]>=2025.10.0",
+    "numba",
+    "h5py",
+    "hdf5plugin",
+    "nptdms",
+    "tifffile",
+    "pyyaml",
+]
+
+[project.urls]
+Homepage = "https://github.com/thielec/massphoto"
+Documentation = "https://thielec.github.io/massphoto/"
+Repository = "https://github.com/thielec/massphoto"
+Issues = "https://github.com/thielec/massphoto/issues"
+
+[project.optional-dependencies]
+testing = [
+    "pytest",
+    "pytest-cov",
+    "zenodozipdownloader",
+]
+docs = [
+    "sphinx",
+    "pydata-sphinx-theme",
+    "sphinx-design",
+    "sphinx-gallery",
+    "sphinx-copybutton",
+    "matplotlib",
+    "zenodozipdownloader",
+    "sphinx-notfound-page",
+    "sphinx-sitemap",
+]
+dev = [
+    "massphoto[testing,docs]",
+    "pre-commit",
+    "ruff",
+    "black",
+    "codespell",
+]
+
+[tool.setuptools.packages.find]
+include = ["massphoto*"]
+
+[tool.setuptools.package-data]
+massphoto = ["py.typed"]
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "C"]
+# Temporarily ignore opinionated rules (complexity, bugbear-zip, ambiguous var names)
+extend-ignore = ["C901", "B905","E741", "E501"]
+# Use mapping for per-file-ignores: pattern -> list of ignored codes
+[tool.ruff.lint."per-file-ignores"]
+"docs/**/*.py" = ["I", "E402"]  # ignore import order and non-top imports in docs and gallery scripts
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--color=yes",
+]
+
+[tool.setuptools_scm]
+write_to = "massphoto/_version.py"
+write_to_template = "__version__ = \"{version}\"\n"
+fallback_version = "0.0.0"
+local_scheme = "no-local-version"
+
+[tool.codespell]
+skip = ".git,.venv,build,dist,*.egg-info,test_data,example_data,docs/build,docs/source/auto_examples,docs/source/gen_modules"
+ignore-words-list = "nd"

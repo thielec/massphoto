@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint, Format & Package Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install lint dependencies
+        run: uv pip install --system ruff black codespell twine
+
+      - name: Check formatting with Black
+        run: black --check massphoto/ tests/ docs/
+
+      - name: Lint with Ruff
+        run: ruff check massphoto/ tests/ docs/
+
+      - name: Check spelling with Codespell
+        run: codespell massphoto/ tests/ docs/source/ README.md pyproject.toml
+
+      - name: Build and verify package distributions
+        run: |
+          uv build
+          twine check dist/*
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv pip install --system -e ".[testing]"
+
+      - name: Cache Zenodo Test Data
+        uses: actions/cache@v4
+        with:
+          path: test_data
+          key: zenodo-test-data-15800729
+
+      - name: Run Test Suite
+        run: pytest

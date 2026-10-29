@@ -1,0 +1,20 @@
+__pycache__
+.vscode/
+.pylintrc
+*.egg-info/
+uv.lock
+# Data downloaded for examples and tests
+example_data/
+test_data/
+# Virtual environments
+*venv*/
+# Build artifacts
+dist/
+build/
+_version.py
+# ignore everything in auto_examples and generated backreferences
+docs/source/auto_examples/
+docs/source/gen_modules/
+sg_execution_times.rst
+.coverage
+.pytest_cache/
