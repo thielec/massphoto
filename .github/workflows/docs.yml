@@ -36,10 +36,27 @@ jobs:
         run: uv pip install --system -e ".[docs]"
 
       - name: Cache Zenodo Example Datasets
+        id: cache-zenodo
         uses: actions/cache@v4
         with:
           path: docs/source/_examples/example_data
           key: zenodo-example-data-15800729
+          save-always: true
+
+      - name: Download Zenodo Example Datasets
+        if: steps.cache-zenodo.outputs.cache-hit != 'true'
+        run: |
+          python - <<'EOF'
+          from zenodozipdownloader import ZenodoZipDownloader
+
+          dl = ZenodoZipDownloader(
+              doi="10.5281/zenodo.15800729",
+              download_dir="docs/source/_examples/example_data",
+          )
+          dl.download(inner_pattern="005_mfp1_500x.mp")
+          dl.download("Figure 2.zip/006_dynamin_6.mp")
+          dl.download("Figure 4.zip/4a/PBS_4.mp")
+          EOF
 
       - name: Build Sphinx HTML Documentation
         run: |

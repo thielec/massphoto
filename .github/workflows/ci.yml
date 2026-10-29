@@ -64,10 +64,24 @@ jobs:
         run: uv pip install --system -e ".[testing]"
 
       - name: Cache Zenodo Test Data
+        id: cache-zenodo
         uses: actions/cache@v4
         with:
           path: test_data
           key: zenodo-test-data-15800729
+          save-always: true
+
+      - name: Download Zenodo Test Data
+        if: steps.cache-zenodo.outputs.cache-hit != 'true'
+        run: |
+          python - <<'EOF'
+          from zenodozipdownloader import ZenodoZipDownloader
+
+          ZenodoZipDownloader(
+              doi="10.5281/zenodo.15800729",
+              download_dir="test_data",
+          ).download(inner_pattern="005_mfp1_500x.mp")
+          EOF
 
       - name: Run Test Suite
         run: pytest
