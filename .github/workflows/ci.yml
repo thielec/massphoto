@@ -63,13 +63,12 @@ jobs:
       - name: Install dependencies
         run: uv pip install --system -e ".[testing]"
 
-      - name: Cache Zenodo Test Data
+      - name: Restore Zenodo Test Data Cache
         id: cache-zenodo
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: test_data
           key: zenodo-test-data-15800729
-          save-always: true
 
       - name: Download Zenodo Test Data
         if: steps.cache-zenodo.outputs.cache-hit != 'true'
@@ -80,8 +79,15 @@ jobs:
           ZenodoZipDownloader(
               doi="10.5281/zenodo.15800729",
               download_dir="test_data",
-          ).download(inner_pattern="005_mfp1_500x.mp")
+          ).download(inner_pattern="005_mfp1_500x.mp", show_progress=False)
           EOF
+
+      - name: Save Zenodo Test Data Cache
+        if: steps.cache-zenodo.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: test_data
+          key: zenodo-test-data-15800729
 
       - name: Run Test Suite
         run: pytest

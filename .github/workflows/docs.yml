@@ -35,16 +35,27 @@ jobs:
       - name: Install documentation dependencies
         run: uv pip install --system -e ".[docs]"
 
-      - name: Cache Zenodo Example Datasets
+      - name: Restore Sphinx-Gallery Cache
+        id: cache-gallery
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            docs/source/auto_examples
+            docs/source/gen_modules/backreferences
+          key: sphinx-gallery-${{ hashFiles('massphoto/**/*.py') }}-${{ hashFiles('docs/source/_examples/*.py') }}
+          restore-keys: |
+            sphinx-gallery-${{ hashFiles('massphoto/**/*.py') }}-
+
+      - name: Restore Zenodo Example Datasets Cache
         id: cache-zenodo
-        uses: actions/cache@v4
+        if: steps.cache-gallery.outputs.cache-hit != 'true'
+        uses: actions/cache/restore@v4
         with:
           path: docs/source/_examples/example_data
           key: zenodo-example-data-15800729
-          save-always: true
 
       - name: Download Zenodo Example Datasets
-        if: steps.cache-zenodo.outputs.cache-hit != 'true'
+        if: steps.cache-gallery.outputs.cache-hit != 'true' && steps.cache-zenodo.outputs.cache-hit != 'true'
         run: |
           python - <<'EOF'
           from zenodozipdownloader import ZenodoZipDownloader
@@ -53,15 +64,31 @@ jobs:
               doi="10.5281/zenodo.15800729",
               download_dir="docs/source/_examples/example_data",
           )
-          dl.download(inner_pattern="005_mfp1_500x.mp")
-          dl.download("Figure 2.zip/006_dynamin_6.mp")
-          dl.download("Figure 4.zip/4a/PBS_4.mp")
+          dl.download(inner_pattern="005_mfp1_500x.mp", show_progress=False)
+          dl.download("Figure 2.zip/006_dynamin_6.mp", show_progress=False)
+          dl.download("Figure 4.zip/4a/PBS_4.mp", show_progress=False)
           EOF
+
+      - name: Save Zenodo Example Datasets Cache
+        if: steps.cache-gallery.outputs.cache-hit != 'true' && steps.cache-zenodo.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: docs/source/_examples/example_data
+          key: zenodo-example-data-15800729
 
       - name: Build Sphinx HTML Documentation
         run: |
           cd docs
           make html
+
+      - name: Save Sphinx-Gallery Cache
+        if: steps.cache-gallery.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            docs/source/auto_examples
+            docs/source/gen_modules/backreferences
+          key: sphinx-gallery-${{ hashFiles('massphoto/**/*.py') }}-${{ hashFiles('docs/source/_examples/*.py') }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
